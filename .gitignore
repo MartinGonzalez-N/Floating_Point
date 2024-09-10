@@ -1,0 +1,12 @@
+work/*
+tape_out/*
+!work/*.tcl
+!work/run
+!work/Makefile
+!work/Makefile.bat
+!work/list.f
+!.gitignore
+*.wcfg
+*.wdb
+*.swp
+logs/
