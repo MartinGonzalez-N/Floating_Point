@@ -82,45 +82,36 @@ def fp16_generate_data():
     return data_rand
 
 #MAIN SCRIPT
-seed = random.randint(0,1000)
-print(seed)
-current_directory = os.getcwd()
-#print(f"Current Directory: {current_directory}")
-subdirectory = "software/fp16_vectors/" + str(seed)
-try:
-    os.mkdir(subdirectory)
-except:
-    pass
-file_directory = os.path.join(current_directory, subdirectory)
-#print(f"File directory: {file_directory}")
+def vector_gen(seed):
+    current_directory = os.getcwd()
+    subdirectory = "software/fp16_vectors/" + str(seed)
+    try:
+        os.mkdir(subdirectory)
+    except:
+        pass
+    file_directory = os.path.join(current_directory, subdirectory)
+    input_a_file_path = os.path.join(file_directory, 'input_a.mem')
+    input_b_file_path = os.path.join(file_directory, 'input_b.mem')
+    output_add_file_path = os.path.join(file_directory, 'output_add.mem')
+    output_mult_file_path = os.path.join(file_directory, 'output_mult.mem')
 
-input_a_file_path = os.path.join(file_directory, 'input_a.mem')
-input_b_file_path = os.path.join(file_directory, 'input_b.mem')
-output_add_file_path = os.path.join(file_directory, 'output_add.mem')
-output_mult_file_path = os.path.join(file_directory, 'output_mult.mem')
+    #Random stimulli vector generator (4 files -> 2 inputs, 1 output & operation)
+    with open(input_a_file_path, 'w') as fileA, open(input_b_file_path, 'w') as fileB, open(output_add_file_path, 'w') as fileAdd, open(output_mult_file_path, 'w') as fileMult:
+        for _ in range(100000):
+            a_fp16_value = np.float16(fp16_generate_data())
+            b_fp16_value = np.float16(fp16_generate_data())
+            o_fp16_value_add = a_fp16_value + b_fp16_value
+            o_fp16_value_mult = a_fp16_value * b_fp16_value
+            a_hex_value = format(int.from_bytes(a_fp16_value.tobytes(), 'little'), '04x')
+            b_hex_value = format(int.from_bytes(b_fp16_value.tobytes(), 'little'), '04x')
+            o_hex_value_add = format(int.from_bytes(o_fp16_value_add.tobytes(), 'little'), '04x')
+            o_hex_value_mult = format(int.from_bytes(o_fp16_value_mult.tobytes(), 'little'), '04x')
+            
+            fileA.write(f"{a_hex_value}\n")
+            fileB.write(f"{b_hex_value}\n")
+            fileAdd.write(f"{o_hex_value_add}\n")
+            fileMult.write(f"{o_hex_value_mult}\n")
 
-#print(f"File A path: {input_a_file_path}")
-#print(f"File B path: {input_b_file_path}")
-#print(f"Output add path: {output_add_file_path}")
-#print(f"Output mult path: {output_mult_file_path}")
-
-#Random stimulli vector generator (4 files -> 2 inputs, 1 output & operation)
-with open(input_a_file_path, 'w') as fileA, open(input_b_file_path, 'w') as fileB, open(output_add_file_path, 'w') as fileAdd, open(output_mult_file_path, 'w') as fileMult:
-    for _ in range(10000):
-        a_fp16_value = np.float16(fp16_generate_data())
-        b_fp16_value = np.float16(fp16_generate_data())
-        o_fp16_value_add = a_fp16_value + b_fp16_value
-        o_fp16_value_mult = a_fp16_value * b_fp16_value
-        a_hex_value = format(int.from_bytes(a_fp16_value.tobytes(), 'little'), '04x')
-        b_hex_value = format(int.from_bytes(b_fp16_value.tobytes(), 'little'), '04x')
-        o_hex_value_add = format(int.from_bytes(o_fp16_value_add.tobytes(), 'little'), '04x')
-        o_hex_value_mult = format(int.from_bytes(o_fp16_value_mult.tobytes(), 'little'), '04x')
-        
-        fileA.write(f"{a_hex_value}\n")
-        fileB.write(f"{b_hex_value}\n")
-        fileAdd.write(f"{o_hex_value_add}\n")
-        fileMult.write(f"{o_hex_value_mult}\n")
-        #print(f"A: {a_hex_value, a_fp16_value}, B (hex): {b_hex_value, b_fp16_value}, O (hex): {o_hex_value,o_fp16_value}")
-        #print(f"A (fp16): {a_fp16_value}, B (fp16): {b_fp16_value}, O (fp16): {o_fp16_value}")
-        #print(f"[ADD]  | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_add}, {o_fp16_value_add}")
-        #print(f"[MULT] | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_mult}, {o_fp16_value_mult}")
+if __name__ == '__main__':
+    seed = random.randint(0,1000)
+    vector_gen(seed)

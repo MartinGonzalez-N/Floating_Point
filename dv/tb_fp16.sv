@@ -52,14 +52,15 @@ initial begin
 	arstn = 0;
 	mode = 1;
 	#100ns;
+	$display("simulated seed %s",seed);
 	arstn = 1;
-	path_a = {"../files/vector_a_",seed,".mem"};
+	path_a = {"../software/fp16_vectors/",seed,"/input_a.mem"};
 	fd_a = $fopen(path_a, "r");
-	path_b = {"../files/vector_b_",seed,".mem"};
+	path_b = {"../software/fp16_vectors/",seed,"/input_b.mem"};
 	fd_b = $fopen(path_b, "r");
-	path_add = {"../files/add_sim_",seed,".mem"};
+	path_add = {"../software/fp16_vectors/",seed,"/output_sim_add.mem"};
 	fd_add = $fopen(path_add,"w");
-	path_mul = {"../files/mul_sim_",seed,".mem"};
+	path_mul = {"../software/fp16_vectors/",seed,"/output_sim_mult.mem"};
 	fd_mul = $fopen(path_mul,"w");
 	#100ns;
 	while (!$feof(fd_a)) begin
