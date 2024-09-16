@@ -20,7 +20,7 @@ if "%1"=="waves" (goto waves)
 	echo Making sim...
 	:: call xsim work.tb_vivado -runall tb_vivado_axi
 	::-wdb dump.sdb
-	call xsim work."%2" -testplusarg "file_arg=%3" -tclbatch "wave.tcl" -wdb dump.sdb
+	call xsim work."%2" -testplusarg "seed_arg=%3" -tclbatch "wave.tcl" -wdb dump.sdb
 	if "%1"=="sim" (exit /B 0)
 
 :waves

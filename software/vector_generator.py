@@ -34,16 +34,25 @@ def fp16_randomize_data_gen(condition):
 #Randomization function
 def fp16_generate_data():
     #randomization ranges
+    man = random.randint(0,1023)/1024
+    exp = random.randint(-14,15)
+    full_rand = [np.float16(np.ldexp(random.randint(0,1)+man, exp)),-np.float16(np.ldexp(random.randint(0,1)+man, exp))]
+    normal_num = [np.float16(np.ldexp(1+man, exp)),-np.float16(np.ldexp(1+man, exp))]
+    subnormal_num = [np.float16(np.ldexp(man, -14)),-np.float16(np.ldexp(man, -14))]
     zero_plus_minus = [np.float16(0.0), np.float16(-0.0)]
     one_plus_minus = [np.float16(1.0), np.float16(-1.0)]
-    smallest_subnormal = [np.float16(np.ldexp(1.0, -24)), np.float16(-np.ldexp(1.0, -24))]
-    largest_subnormal = [np.float16(np.ldexp(1.0, -23) - np.ldexp(1.0, -24)), np.float16(-np.ldexp(1.0, -23) + np.ldexp(1.0, -24))]
+    smallest_subnormal = [np.float16(np.ldexp(1.0/1024, -14)), np.float16(-np.ldexp(1.0/1024, -14))]
+    largest_subnormal = [np.float16(np.ldexp(1023/1024, -14)), np.float16(-np.ldexp(1023/1024, -14))]
     smallest_normal = [np.float16(np.ldexp(1.0, -14)), np.float16(-np.ldexp(1.0, -14))]
-    largest_normal = [np.float16(np.float16(np.finfo(np.float16).max)), np.float16(-np.float16(np.finfo(np.float16).max))]
-
+    largest_normal = [np.float16(np.ldexp(1.0+1023/1024, 15)), np.float16(-np.ldexp(1.0+1023/1024, 15))]
+    #largest_normal = [np.float16(np.float16(np.finfo(np.float16).max)), np.float16(-np.float16(np.finfo(np.float16).max))]
+    random.randint(0,1023)
     #array of weights for each randomization range
     cases = [
-        (10000, lambda: fp16_randomize_data_gen(lambda x: x != 0x0000 and x != 0x8000)),  # random != 0+-
+        #(10000, lambda: fp16_randomize_data_gen(lambda x: x != 0x0000 and x != 0x8000)),  # random != 0+-
+        (1000, lambda: random.choice(full_rand)),
+        (10, lambda: random.choice(subnormal_num)),
+        (1000, lambda: random.choice(normal_num)),
         (1, lambda: random.choice(zero_plus_minus)),     # zero+-
         (1, lambda: random.choice(one_plus_minus)),      # one +-
         (1, lambda: random.choice(smallest_subnormal)),  # smallest subnormal (exp == 0)
@@ -51,7 +60,6 @@ def fp16_generate_data():
         (1, lambda: random.choice(smallest_normal)),     # smallest normal
         (1, lambda: random.choice(largest_normal)),      # largest normal
     ]
-
     #choice based on the weights
     weights, actions = zip(*cases)
     action = random.choices(actions, weights=weights)[0]
@@ -74,33 +82,39 @@ def fp16_generate_data():
     return data_rand
 
 #MAIN SCRIPT
+seed = random.randint(0,1000)
+print(seed)
 current_directory = os.getcwd()
-print(f"Current Directory: {current_directory}")
-subdirectory = "dv\python" 
+#print(f"Current Directory: {current_directory}")
+subdirectory = "software/fp16_vectors/" + str(seed)
+try:
+    os.mkdir(subdirectory)
+except:
+    pass
 file_directory = os.path.join(current_directory, subdirectory)
-print(f"File directory: {file_directory}")
+#print(f"File directory: {file_directory}")
 
-input_a_file_path = os.path.join(file_directory, 'input_a.txt')
-input_b_file_path = os.path.join(file_directory, 'input_b.txt')
-output_add_file_path = os.path.join(file_directory, 'output_add.txt')
-output_mult_file_path = os.path.join(file_directory, 'output_mult.txt')
+input_a_file_path = os.path.join(file_directory, 'input_a.mem')
+input_b_file_path = os.path.join(file_directory, 'input_b.mem')
+output_add_file_path = os.path.join(file_directory, 'output_add.mem')
+output_mult_file_path = os.path.join(file_directory, 'output_mult.mem')
 
-print(f"File A path: {input_a_file_path}")
-print(f"File B path: {input_b_file_path}")
-print(f"Output add path: {output_add_file_path}")
-print(f"Output mult path: {output_mult_file_path}")
+#print(f"File A path: {input_a_file_path}")
+#print(f"File B path: {input_b_file_path}")
+#print(f"Output add path: {output_add_file_path}")
+#print(f"Output mult path: {output_mult_file_path}")
 
 #Random stimulli vector generator (4 files -> 2 inputs, 1 output & operation)
-with open('input_a.txt', 'w') as fileA, open('input_b.txt', 'w') as fileB, open('output_add.txt', 'w') as fileAdd, open('output_mult.txt', 'w') as fileMult:
-    for _ in range(10):
+with open(input_a_file_path, 'w') as fileA, open(input_b_file_path, 'w') as fileB, open(output_add_file_path, 'w') as fileAdd, open(output_mult_file_path, 'w') as fileMult:
+    for _ in range(10000):
         a_fp16_value = np.float16(fp16_generate_data())
         b_fp16_value = np.float16(fp16_generate_data())
         o_fp16_value_add = a_fp16_value + b_fp16_value
         o_fp16_value_mult = a_fp16_value * b_fp16_value
-        a_hex_value = format(int.from_bytes(a_fp16_value.tobytes(), 'little'), 'x')
-        b_hex_value = format(int.from_bytes(b_fp16_value.tobytes(), 'little'), 'x')
-        o_hex_value_add = format(int.from_bytes(o_fp16_value_add.tobytes(), 'little'), 'x')
-        o_hex_value_mult = format(int.from_bytes(o_fp16_value_mult.tobytes(), 'little'), 'x')
+        a_hex_value = format(int.from_bytes(a_fp16_value.tobytes(), 'little'), '04x')
+        b_hex_value = format(int.from_bytes(b_fp16_value.tobytes(), 'little'), '04x')
+        o_hex_value_add = format(int.from_bytes(o_fp16_value_add.tobytes(), 'little'), '04x')
+        o_hex_value_mult = format(int.from_bytes(o_fp16_value_mult.tobytes(), 'little'), '04x')
         
         fileA.write(f"{a_hex_value}\n")
         fileB.write(f"{b_hex_value}\n")
@@ -108,5 +122,5 @@ with open('input_a.txt', 'w') as fileA, open('input_b.txt', 'w') as fileB, open(
         fileMult.write(f"{o_hex_value_mult}\n")
         #print(f"A: {a_hex_value, a_fp16_value}, B (hex): {b_hex_value, b_fp16_value}, O (hex): {o_hex_value,o_fp16_value}")
         #print(f"A (fp16): {a_fp16_value}, B (fp16): {b_fp16_value}, O (fp16): {o_fp16_value}")
-        print(f"[ADD]  | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_add}, {o_fp16_value_add}")
-        print(f"[MULT] | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_mult}, {o_fp16_value_mult}")
+        #print(f"[ADD]  | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_add}, {o_fp16_value_add}")
+        #print(f"[MULT] | A: {a_hex_value}, {a_fp16_value}, | B: {b_hex_value}, {b_fp16_value}, | O: {o_hex_value_mult}, {o_fp16_value_mult}")
