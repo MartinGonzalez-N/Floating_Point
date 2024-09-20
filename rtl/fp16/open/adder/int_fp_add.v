@@ -9,12 +9,13 @@ module int_fp_add (
     output [15:0] c
     );
 
-    wire [10:0] adder_input_1,adder_input_2,aligned_small,adder_output;
+    wire [13:0] adder_input_1,adder_input_2,aligned_small,adder_output;
     wire if_sub,a_sign, b_sign, c_sign,c1;
     wire [15:0] normalized_out;
 
     // only used in INT8 MAC mode
     wire [4:0] higher_add,higher_a,higher_b;
+    wire carry_valid;
 
     wire [15:0] result;
     reg [14:0] bigger, smaller;
@@ -22,9 +23,9 @@ module int_fp_add (
 
 `ifdef PIPLINE
     reg [14:0] bigger_reg, smaller_reg;
-    reg [10:0] adder_output_reg;
+    reg [13:0] adder_output_reg;
     wire [14:0] bigger_tmp, smaller_tmp;
-    wire [10:0] adder_output_tmp;
+    wire [13:0] adder_output_tmp;
 `endif  
 
 
@@ -34,7 +35,7 @@ module int_fp_add (
     assign c_sign        = a_larger_b ? a_sign : b_sign;
     assign higher_a      = (mode == 1'b0) ? a[15:11] : 5'b0;
     assign higher_b      = (mode == 1'b0) ? b[15:11] : 5'b0;
-    assign adder_input_1 = (mode==1'b0) ? a[10:0] :{1'b1,bigger[9:0]};
+    assign adder_input_1 = (mode==1'b0) ? a[10:0] :{1'b1,bigger[9:0],3'd0};
     assign adder_input_2 = (mode==1'b0) ? b[10:0] : (if_sub ? ~aligned_small + 1'b1 : aligned_small);
     assign c             = (mode == 1'b0) ? {higher_add,adder_output} : result;
 
@@ -56,7 +57,7 @@ module int_fp_add (
         if (!rst_n) begin
             bigger_reg <= 15'b0;
             smaller_reg <= 15'b0;
-            adder_output_reg <= 11'b0;
+            adder_output_reg <= 14'b0;
         end else begin
             bigger_reg <= bigger;
             smaller_reg <= smaller;
@@ -65,7 +66,7 @@ module int_fp_add (
     end
     assign bigger_tmp = bigger_reg[14:0];
     assign smaller_tmp = smaller_reg[14:0];
-    assign adder_output_tmp = adder_output_reg[10:0];
+    assign adder_output_tmp = adder_output_reg;
 `endif
 
 `ifdef PIPLINE
@@ -76,15 +77,17 @@ module int_fp_add (
     alignment u1(bigger,smaller,aligned_small);
 `endif
 
-    cla_nbit #(.n(11)) u2(adder_input_1,adder_input_2,1'b0,adder_output,c1);
+    cla_nbit #(.n(14)) u2(adder_input_1,adder_input_2,1'b0,adder_output,c1);
 
     // This 5 bit adder only used in INT8 MAC mode
     cla_nbit #(.n(5)) u3(higher_a,higher_b,c1,higher_add,c2);
 
+    assign carry_valid = if_sub ? 0 : c1;
+    
 `ifdef PIPLINE
-    add_normalizer u4(c_sign,bigger[14:10],adder_output_tmp,result,c1,if_sub);
+    add_normalizer u4(c_sign,bigger[14:10],adder_output_tmp,result,carry_valid,if_sub);
 `else 
-    add_normalizer u4(c_sign,bigger[14:10],adder_output,result,c1,if_sub);
+    add_normalizer u4(c_sign,bigger[14:10],adder_output,result,carry_valid,if_sub);
 `endif
 
 endmodule

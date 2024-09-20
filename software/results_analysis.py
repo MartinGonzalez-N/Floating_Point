@@ -19,7 +19,7 @@ def report(seed):
     #paths
     rep_path = "software/fp16_vectors/"+seed
     va_path = rep_path+"/input_a.mem"
-    vb_path = rep_path+"/input_a.mem"
+    vb_path = rep_path+"/input_b.mem"
     mul_exp_path = rep_path+"/output_mult.mem"
     add_exp_path = rep_path+"/output_add.mem" 
     mul_sim_path = rep_path+"/output_sim_mult.mem"
