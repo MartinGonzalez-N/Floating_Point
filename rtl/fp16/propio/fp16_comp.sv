@@ -2,7 +2,7 @@
 module flpcomp#(parameter Bits = 32)(
 	input logic [Bits-1:0] a,
 	input logic [Bits-1:0] b,
-	output logic [Bits-1:0] z
+	output logic [Bits-1:0] y
 );
 	logic a_mag_higher;
 	logic b_mag_higher;
@@ -21,18 +21,18 @@ module flpcomp#(parameter Bits = 32)(
 	always_comb begin
 		case({a[Bits-1],b[Bits-1],a_mag_higher,b_mag_higher})
 			//both positive
-			4'b0001: z = b;
-			4'b0010: z = a;
+			4'b0001: y = b;
+			4'b0010: y = a;
 			//a higher
-			4'b0101: z = a;
-			4'b0110: z = a;
+			4'b0101: y = a;
+			4'b0110: y = a;
 			//b higher
-			4'b1001: z = b;
-			4'b1010: z = b;
+			4'b1001: y = b;
+			4'b1010: y = b;
 			//both negative
-			4'b1101: z = a;
-			4'b1110: z = b;
-			default: z = a;
+			4'b1101: y = a;
+			4'b1110: y = b;
+			default: y = a;
 		endcase
 	end
 

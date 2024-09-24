@@ -24,6 +24,7 @@ int fd_b;
 int fd_add;
 int fd_mul;
 
+/*
 int_fp_add add_i(
 `ifdef PIPLINE
 	.clk(clk),
@@ -45,6 +46,18 @@ int_fp_mul mul_i(
 	.b(b),
 	.c(mul),
 	.error(mul_error)
+);
+*/
+fp_add #(.BITS(WORD_LENGHT)) add_i (
+	.iA(a),
+	.iB(b),
+	.oZ(add)
+);
+
+fp_mult #(.BITS(WORD_LENGHT)) mult_i(
+	.iA(a),
+	.iB(b),
+	.oZ(mul)
 );
 
 initial begin
@@ -68,7 +81,7 @@ initial begin
 		x = $fgets(str_b,fd_b);
 		a = str_a.atohex();
 		b = str_b.atohex();
-		repeat (4) @(posedge clk);
+		repeat (1) @(posedge clk);
 		$fdisplay(fd_add,"%h",add);
 		$fdisplay(fd_mul,"%h",mul);
 	end

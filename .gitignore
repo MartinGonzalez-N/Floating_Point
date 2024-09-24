@@ -10,3 +10,4 @@ tape_out/*
 *.wdb
 *.swp
 logs/
+software/fp16_vectors

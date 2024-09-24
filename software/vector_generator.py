@@ -97,7 +97,7 @@ def vector_gen(seed):
 
     #Random stimulli vector generator (4 files -> 2 inputs, 1 output & operation)
     with open(input_a_file_path, 'w') as fileA, open(input_b_file_path, 'w') as fileB, open(output_add_file_path, 'w') as fileAdd, open(output_mult_file_path, 'w') as fileMult:
-        for _ in range(100000):
+        for _ in range(1000000):
             a_fp16_value = np.float16(fp16_generate_data())
             b_fp16_value = np.float16(fp16_generate_data())
             o_fp16_value_add = a_fp16_value + b_fp16_value
