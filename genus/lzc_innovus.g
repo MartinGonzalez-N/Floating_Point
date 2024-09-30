@@ -1,8 +1,8 @@
 ######################################################################
 
-# Created by Genus(TM) Synthesis Solution 21.10-p002_1 on Tue Sep 24 20:53:51 UTC 2024
+# Created by Genus(TM) Synthesis Solution 21.10-p002_1 on Mon Sep 30 21:30:21 UTC 2024
 
-# This file contains the Genus script for /designs/lzc_32
+# This file contains the Genus script for /designs/lzc_24
 
 ######################################################################
 
@@ -15,14 +15,14 @@
 ::legacy::set_attribute -quiet phys_route_time_out 120.0 /
 ::legacy::set_attribute -quiet capacitance_per_unit_length_mmmc {} /
 ::legacy::set_attribute -quiet resistance_per_unit_length_mmmc {} /
-::legacy::set_attribute -quiet runtime_by_stage {{PBS_Generic-Start 0 14 0.0 12.0} {to_generic 1 15 0 12} {first_condense 1 16 0 13} {PBS_Generic_Opt-Post 2 16 0.9547980000000003 12.954798} {{PBS_Generic-Postgen HBO Optimizations} 0 16 0.0 12.954798}} /
+::legacy::set_attribute -quiet runtime_by_stage {{PBS_Generic-Start 0 12 0.0 11.0} {to_generic 2 14 1 12} {first_condense 0 14 0 12} {PBS_Generic_Opt-Post 2 14 1.9636530000000008 12.963653} {{PBS_Generic-Postgen HBO Optimizations} 0 14 0.0 12.963653}} /
 ::legacy::set_attribute -quiet timing_adjust_tns_of_complex_flops false /
 ::legacy::set_attribute -quiet hdl_language sv /
 ::legacy::set_attribute -quiet tinfo_tstamp_file .rs_joc.tstamp /
 ::legacy::set_attribute -quiet script_search_path /home/joc/jc_work/Floating_Point/genus/ /
 ::legacy::set_attribute -quiet timing_disable_library_data_to_data_checks false /
 ::legacy::set_attribute -quiet timing_disable_non_sequential_checks false /
-::legacy::set_attribute -quiet flow_metrics_snapshot_uuid 20df2bb2-24c1-4cee-85e3-425b2d7c652a /
+::legacy::set_attribute -quiet flow_metrics_snapshot_uuid 6225dccc-6f83-4bd7-8b9e-3594d72dce06 /
 ::legacy::set_attribute -quiet phys_use_segment_parasitics true /
 ::legacy::set_attribute -quiet probabilistic_extraction true /
 ::legacy::set_attribute -quiet ple_correlation_factors {1.9000 2.0000} /
@@ -109,52 +109,44 @@
 ::legacy::set_attribute -quiet dft_scan_style muxed_scan /
 ::legacy::set_attribute -quiet dft_scanbit_waveform_analysis false /
 # END DFT SECTION
-::legacy::set_attribute -quiet seq_reason_deleted_internal {} /designs/lzc_32
-::legacy::set_attribute -quiet qos_by_stage {{to_generic {wns -11111111} {tns -111111111} {vep -111111111} {area 761} {cell_count 98} {utilization  0.00} {runtime 1 15 0 12} }{first_condense {wns -11111111} {tns -111111111} {vep -111111111} {area 749} {cell_count 89} {utilization  0.00} {runtime 1 16 0 13} }} /designs/lzc_32
-::legacy::set_attribute -quiet seq_mbci_coverage 0.0 /designs/lzc_32
-::legacy::set_attribute -quiet hdl_user_name lzc_32 /designs/lzc_32
-::legacy::set_attribute -quiet hdl_filelist {{default -sv {SYNTHESIS} {../rtl/lz/lzc_32.sv} {/home/joc/jc_work/Floating_Point/rtl/lz/} {}} {default -sv {SYNTHESIS} {../rtl/lz/lzc_4.sv} {/home/joc/jc_work/Floating_Point/rtl/lz/} {}} {default -sv {SYNTHESIS} {../rtl/lz/lzc_8.sv} {/home/joc/jc_work/Floating_Point/rtl/lz/} {}} {default -sv {SYNTHESIS} {../rtl/lz/lzc_16.sv} {/home/joc/jc_work/Floating_Point/rtl/lz/} {}}} /designs/lzc_32
-::legacy::set_attribute -quiet verification_directory fv/lzc_32 /designs/lzc_32
-::legacy::set_attribute -quiet arch_filename ./../rtl/lz/lzc_32.sv /designs/lzc_32
-::legacy::set_attribute -quiet entity_filename ./../rtl/lz/lzc_32.sv /designs/lzc_32
-::legacy::set_attribute -quiet original_name {a[31]} {/designs/lzc_32/ports_in/a[31]}
-::legacy::set_attribute -quiet original_name {a[30]} {/designs/lzc_32/ports_in/a[30]}
-::legacy::set_attribute -quiet original_name {a[29]} {/designs/lzc_32/ports_in/a[29]}
-::legacy::set_attribute -quiet original_name {a[28]} {/designs/lzc_32/ports_in/a[28]}
-::legacy::set_attribute -quiet original_name {a[27]} {/designs/lzc_32/ports_in/a[27]}
-::legacy::set_attribute -quiet original_name {a[26]} {/designs/lzc_32/ports_in/a[26]}
-::legacy::set_attribute -quiet original_name {a[25]} {/designs/lzc_32/ports_in/a[25]}
-::legacy::set_attribute -quiet original_name {a[24]} {/designs/lzc_32/ports_in/a[24]}
-::legacy::set_attribute -quiet original_name {a[23]} {/designs/lzc_32/ports_in/a[23]}
-::legacy::set_attribute -quiet original_name {a[22]} {/designs/lzc_32/ports_in/a[22]}
-::legacy::set_attribute -quiet original_name {a[21]} {/designs/lzc_32/ports_in/a[21]}
-::legacy::set_attribute -quiet original_name {a[20]} {/designs/lzc_32/ports_in/a[20]}
-::legacy::set_attribute -quiet original_name {a[19]} {/designs/lzc_32/ports_in/a[19]}
-::legacy::set_attribute -quiet original_name {a[18]} {/designs/lzc_32/ports_in/a[18]}
-::legacy::set_attribute -quiet original_name {a[17]} {/designs/lzc_32/ports_in/a[17]}
-::legacy::set_attribute -quiet original_name {a[16]} {/designs/lzc_32/ports_in/a[16]}
-::legacy::set_attribute -quiet original_name {a[15]} {/designs/lzc_32/ports_in/a[15]}
-::legacy::set_attribute -quiet original_name {a[14]} {/designs/lzc_32/ports_in/a[14]}
-::legacy::set_attribute -quiet original_name {a[13]} {/designs/lzc_32/ports_in/a[13]}
-::legacy::set_attribute -quiet original_name {a[12]} {/designs/lzc_32/ports_in/a[12]}
-::legacy::set_attribute -quiet original_name {a[11]} {/designs/lzc_32/ports_in/a[11]}
-::legacy::set_attribute -quiet original_name {a[10]} {/designs/lzc_32/ports_in/a[10]}
-::legacy::set_attribute -quiet original_name {a[9]} {/designs/lzc_32/ports_in/a[9]}
-::legacy::set_attribute -quiet original_name {a[8]} {/designs/lzc_32/ports_in/a[8]}
-::legacy::set_attribute -quiet original_name {a[7]} {/designs/lzc_32/ports_in/a[7]}
-::legacy::set_attribute -quiet original_name {a[6]} {/designs/lzc_32/ports_in/a[6]}
-::legacy::set_attribute -quiet original_name {a[5]} {/designs/lzc_32/ports_in/a[5]}
-::legacy::set_attribute -quiet original_name {a[4]} {/designs/lzc_32/ports_in/a[4]}
-::legacy::set_attribute -quiet original_name {a[3]} {/designs/lzc_32/ports_in/a[3]}
-::legacy::set_attribute -quiet original_name {a[2]} {/designs/lzc_32/ports_in/a[2]}
-::legacy::set_attribute -quiet original_name {a[1]} {/designs/lzc_32/ports_in/a[1]}
-::legacy::set_attribute -quiet original_name {a[0]} {/designs/lzc_32/ports_in/a[0]}
-::legacy::set_attribute -quiet original_name {c[4]} {/designs/lzc_32/ports_out/c[4]}
-::legacy::set_attribute -quiet original_name {c[3]} {/designs/lzc_32/ports_out/c[3]}
-::legacy::set_attribute -quiet original_name {c[2]} {/designs/lzc_32/ports_out/c[2]}
-::legacy::set_attribute -quiet original_name {c[1]} {/designs/lzc_32/ports_out/c[1]}
-::legacy::set_attribute -quiet original_name {c[0]} {/designs/lzc_32/ports_out/c[0]}
-::legacy::set_attribute -quiet original_name v /designs/lzc_32/ports_out/v
+::legacy::set_attribute -quiet seq_reason_deleted_internal {} /designs/lzc_24
+::legacy::set_attribute -quiet qos_by_stage {{to_generic {wns -11111111} {tns -111111111} {vep -111111111} {area 585} {cell_count 68} {utilization  0.00} {runtime 2 14 1 12} }{first_condense {wns -11111111} {tns -111111111} {vep -111111111} {area 551} {cell_count 66} {utilization  0.00} {runtime 0 14 0 12} }} /designs/lzc_24
+::legacy::set_attribute -quiet seq_mbci_coverage 0.0 /designs/lzc_24
+::legacy::set_attribute -quiet hdl_user_name lzc_24 /designs/lzc_24
+::legacy::set_attribute -quiet hdl_filelist {{default {-sv -f} {SYNTHESIS} {dv_list} {} {}}} /designs/lzc_24
+::legacy::set_attribute -quiet verification_directory fv/lzc_24 /designs/lzc_24
+::legacy::set_attribute -quiet arch_filename ../rtl/JC_VER/lzc_24b.sv /designs/lzc_24
+::legacy::set_attribute -quiet entity_filename ../rtl/JC_VER/lzc_24b.sv /designs/lzc_24
+::legacy::set_attribute -quiet original_name {a[23]} {/designs/lzc_24/ports_in/a[23]}
+::legacy::set_attribute -quiet original_name {a[22]} {/designs/lzc_24/ports_in/a[22]}
+::legacy::set_attribute -quiet original_name {a[21]} {/designs/lzc_24/ports_in/a[21]}
+::legacy::set_attribute -quiet original_name {a[20]} {/designs/lzc_24/ports_in/a[20]}
+::legacy::set_attribute -quiet original_name {a[19]} {/designs/lzc_24/ports_in/a[19]}
+::legacy::set_attribute -quiet original_name {a[18]} {/designs/lzc_24/ports_in/a[18]}
+::legacy::set_attribute -quiet original_name {a[17]} {/designs/lzc_24/ports_in/a[17]}
+::legacy::set_attribute -quiet original_name {a[16]} {/designs/lzc_24/ports_in/a[16]}
+::legacy::set_attribute -quiet original_name {a[15]} {/designs/lzc_24/ports_in/a[15]}
+::legacy::set_attribute -quiet original_name {a[14]} {/designs/lzc_24/ports_in/a[14]}
+::legacy::set_attribute -quiet original_name {a[13]} {/designs/lzc_24/ports_in/a[13]}
+::legacy::set_attribute -quiet original_name {a[12]} {/designs/lzc_24/ports_in/a[12]}
+::legacy::set_attribute -quiet original_name {a[11]} {/designs/lzc_24/ports_in/a[11]}
+::legacy::set_attribute -quiet original_name {a[10]} {/designs/lzc_24/ports_in/a[10]}
+::legacy::set_attribute -quiet original_name {a[9]} {/designs/lzc_24/ports_in/a[9]}
+::legacy::set_attribute -quiet original_name {a[8]} {/designs/lzc_24/ports_in/a[8]}
+::legacy::set_attribute -quiet original_name {a[7]} {/designs/lzc_24/ports_in/a[7]}
+::legacy::set_attribute -quiet original_name {a[6]} {/designs/lzc_24/ports_in/a[6]}
+::legacy::set_attribute -quiet original_name {a[5]} {/designs/lzc_24/ports_in/a[5]}
+::legacy::set_attribute -quiet original_name {a[4]} {/designs/lzc_24/ports_in/a[4]}
+::legacy::set_attribute -quiet original_name {a[3]} {/designs/lzc_24/ports_in/a[3]}
+::legacy::set_attribute -quiet original_name {a[2]} {/designs/lzc_24/ports_in/a[2]}
+::legacy::set_attribute -quiet original_name {a[1]} {/designs/lzc_24/ports_in/a[1]}
+::legacy::set_attribute -quiet original_name {a[0]} {/designs/lzc_24/ports_in/a[0]}
+::legacy::set_attribute -quiet original_name {c[4]} {/designs/lzc_24/ports_out/c[4]}
+::legacy::set_attribute -quiet original_name {c[3]} {/designs/lzc_24/ports_out/c[3]}
+::legacy::set_attribute -quiet original_name {c[2]} {/designs/lzc_24/ports_out/c[2]}
+::legacy::set_attribute -quiet original_name {c[1]} {/designs/lzc_24/ports_out/c[1]}
+::legacy::set_attribute -quiet original_name {c[0]} {/designs/lzc_24/ports_out/c[0]}
+::legacy::set_attribute -quiet original_name v /designs/lzc_24/ports_out/v
 # BEGIN PMBIST SECTION
 # END PMBIST SECTION
 #############################################################
@@ -162,7 +154,7 @@
 ##
 ## Written by Genus(TM) Synthesis Solution version 21.10-p002_1
 ## flowkit v21.10-d047_1
-## Written on 20:53:51 24-Sep 2024
+## Written on 21:30:21 30-Sep 2024
 #############################################################
 #####   Flow Definitions   ##################################
 
@@ -217,7 +209,7 @@ if {[is_attribute flow_step_next -obj_type root]} {set_flowkit_db flow_step_next
 if {[is_attribute flow_working_directory -obj_type root]} {set_flowkit_db flow_working_directory .}
 if {[is_attribute flow_branch -obj_type root]} {set_flowkit_db flow_branch {}}
 if {[is_attribute flow_caller_data -obj_type root]} {set_flowkit_db flow_caller_data {}}
-if {[is_attribute flow_metrics_snapshot_uuid -obj_type root]} {set_flowkit_db flow_metrics_snapshot_uuid 20df2bb2-24c1-4cee-85e3-425b2d7c652a}
+if {[is_attribute flow_metrics_snapshot_uuid -obj_type root]} {set_flowkit_db flow_metrics_snapshot_uuid 6225dccc-6f83-4bd7-8b9e-3594d72dce06}
 if {[is_attribute flow_starting_db -obj_type root]} {set_flowkit_db flow_starting_db {}}
 if {[is_attribute flow_db_directory -obj_type root]} {set_flowkit_db flow_db_directory dbs}
 if {[is_attribute flow_report_directory -obj_type root]} {set_flowkit_db flow_report_directory reports}

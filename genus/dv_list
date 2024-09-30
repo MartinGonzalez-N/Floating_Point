@@ -1,6 +1,8 @@
+../rtl/JC_VER/lzc_24b.sv
+../rtl/JC_VER/lzc_4b.sv
+../rtl/JC_VER/lzc_8b.sv
 
-../rtl/lz/lzc_32.sv
-../rtl/lz/lzc_4.sv
-../rtl/lz/lzc_8.sv
-../rtl/lz/lzc_16.sv
+
+
+
 

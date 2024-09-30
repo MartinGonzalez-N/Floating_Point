@@ -14,12 +14,9 @@ set_db timing_disable_non_sequential_checks 0
 
 #leer archivos hdl
 #read_hdl -f alfacen_list
-#read_hdl -f dv_list
+read_hdl -f dv_list
 
-read_hdl ../rtl/lz/lzc_32.sv
-read_hdl ../rtl/lz/lzc_4.sv
-read_hdl ../rtl/lz/lzc_8.sv
-read_hdl ../rtl/lz/lzc_16.sv
+
 
 # elaborar
 elaborate
