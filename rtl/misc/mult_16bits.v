@@ -11,36 +11,17 @@ output wire [2*Bits-1:0] oZ;
 grouping the bits of the multiplier into groups, and selecting the partial products from the set M,2M,3M,4M 
 where M is the multiplicand.*/
 
-logic [3:0] p_sel;
-logic s;
-logic [Bits+1:0] tmp1M; //18bit signals for the 4M = 2bit left shift
-logic [Bits+1:0] tmp2M;
-logic [Bits+1:0] tmp3M;
-logic [Bits+1:0] tmp4M;
+logic s [5:0];
+logic [3:0] p_sel [5:0];
+logic [3:0] iQ_group [5:0];
+logic [Bits+2:0] tmp_iQ; //19 bit signal for group selection
+logic [Bits+1:0] tmp1M, tmp1MN; //18bit signals for the 4M = 2bit left shift + sign MSB
+logic [Bits+1:0] tmp2M, tmp2MN;
+logic [Bits+1:0] tmp3M, tmp2MN;
+logic [Bits+1:0] tmp4M, tmp4MN;
+logic [Bits+1:0] tmpM_val [5:0];
+logic [2*Bits-1:0] prt_prod [5:0]; //6 partial products
 
-//Booth decoder for partial product selection {M,2M,3M,4M}.
-//DUDA: how to select the group of bits in the multiplier (Q_group)? By shifting left 4 bits every clk edge? sequential ckt
-always_comb begin
-    case (Q_group)     //{1M,2M,3M,4M}
-        4'b0000: p_sel = 4'b0000; s = 1'b0; //S=0 
-        4'b0001: p_sel = 4'b1000; s = 1'b0; 
-        4'b0010: p_sel = 4'b1000; s = 1'b0; 
-        4'b0011: p_sel = 4'b0100; s = 1'b0; 
-        4'b0100: p_sel = 4'b0100; s = 1'b0; 
-        4'b0101: p_sel = 4'b0010; s = 1'b0; 
-        4'b0110: p_sel = 4'b0010; s = 1'b0; 
-        4'b0111: p_sel = 4'b0001; s = 1'b0; 
-        4'b1000: p_sel = 4'b0001; s = 1'b1; //S=1 
-        4'b1001: p_sel = 4'b0010; s = 1'b1;
-        4'b1010: p_sel = 4'b0010; s = 1'b1;
-        4'b1011: p_sel = 4'b0100; s = 1'b1;
-        4'b1100: p_sel = 4'b0100; s = 1'b1;
-        4'b1101: p_sel = 4'b1000; s = 1'b1;
-        4'b1110: p_sel = 4'b1000; s = 1'b1;
-        4'b1111: p_sel = 4'b0000; s = 1'b1;
-        default: p_sel = 4'b0000; s = 1'b1; 
-    endcase
-end
 
 //Generation of partial products (both positive and negative values eg. -M,+M)
 //All xM signals are 18 bits size.
@@ -48,33 +29,75 @@ end
 //2M = M<<1 or {Multiplicand[k-1:0],1'b0}.
 //3M = (1M + 2M) = M<<1 + 1M  or  {M,0}+{0,M}  
 //4M = M<<2 or {Multiplicand[k-2:0],2'b00}.
+//carry s bit for negative values
 always_comb begin
     tmp1M  =  {2'b00,iM} 
-    tmp1MN = ~{2'b00,iM} + 18'd1;
-    tmp2M  =  (tmp1M << 1); //k-1 = Bits (17th bit out of [Bits+1:0] = 18bits) --> DUDA: {tmp1M[Bits:0],1'b0}
-    tmp2MN = ~(tmp1M << 1) + 18'd1; 
+    tmp1MN = ~{2'b00,iM}; //+ 18'd1; 
+    tmp2M  =  (tmp1M << 1); 
+    tmp2MN = ~(tmp1M << 1); // + 18'd1; 
     tmp3M  =  (tmp1M + tmp2M);
-    tmp3MN = ~(tmp1M + tmp2M) + 18'd1;
-    tmp4M  =  (tmp1M << 2); //k-2 = Bits-1 (16th bit) --> DUDA: {tmp1M[Bits-1:0],2'b00} 
-    tmp4M  = ~(tmp1M << 2) + 18'd1; //DUDA: could this overflow thus requiring 19 bits? 
+    tmp3MN = ~(tmp1M + tmp2M); // + 18'd1;
+    tmp4M  =  (tmp1M << 2);  
+    tmp4M  = ~(tmp1M << 2); // + 18'd1; 
 end   
 
-//Multiplexer for partial product selection according to p_sel and s.
-//DUDA: Will there be 6 partial products always for 16 bit multiplication?
-//DUDA: generate structure for 6 partial products?? otherwise "foreach group in multiplier -> (mult = mult + prt_prod)""
-always_comb begin
-    case (p_sel)     
-        4'd0: prt_prod = 18'd0;  //DUDA: include -0? 
-        4'd1: prt_prod = (!s) ? tmp1M : tmp1MN;
-        4'd2: prt_prod = (!s) ? tmp2M : tmp2MN;
-        4'd4: prt_prod = (!s) ? tmp3M : tmp3MN;
-        4'd8: prt_prod = (!s) ? tmp4M : tmp4MN;
+
+//Booth decoder for partial product selection {M,2M,3M,4M}. 
+//Generated 6 times as 6 partial products are generated from 6 iQ groups.
+assign tmp_iQ = {2'b00,iQ,1'b0}
+
+genvar i;
+generate
+for (i = 0; i < 6; i = i + 1) begin : Booth_decoder
+    always_comb begin
+    iQ_group[i] = tmp_iQ[((i*3)+3):i*3]; //i=0 => LSB
+
+    case (iQ_group[i])// {1M,2M,3M,4M}
+        4'b0000: p_sel[i] = 4'b0000; s[i] = 1'b0; //S=0 
+        4'b0001: p_sel[i] = 4'b1000; s[i] = 1'b0;
+        4'b0010: p_sel[i] = 4'b1000; s[i] = 1'b0;
+        4'b0011: p_sel[i] = 4'b0100; s[i] = 1'b0;
+        4'b0100: p_sel[i] = 4'b0100; s[i] = 1'b0;
+        4'b0101: p_sel[i] = 4'b0010; s[i] = 1'b0;
+        4'b0110: p_sel[i] = 4'b0010; s[i] = 1'b0;
+        4'b0111: p_sel[i] = 4'b0001; s[i] = 1'b0;
+        4'b1000: p_sel[i] = 4'b0001; s[i] = 1'b1; //S=1 
+        4'b1001: p_sel[i] = 4'b0010; s[i] = 1'b1;
+        4'b1010: p_sel[i] = 4'b0010; s[i] = 1'b1;
+        4'b1011: p_sel[i] = 4'b0100; s[i] = 1'b1;
+        4'b1100: p_sel[i] = 4'b0100; s[i] = 1'b1;
+        4'b1101: p_sel[i] = 4'b1000; s[i] = 1'b1;
+        4'b1110: p_sel[i] = 4'b1000; s[i] = 1'b1;
+        4'b1111: p_sel[i] = 4'b0000; s[i] = 1'b1;
+        default: p_sel[i] = 4'b0000; s[i] = 1'b1;
+    endcase
+
+    //Multiplexer for partial product selection according to p_sel and s.
+    case (p_sel[i])     
+        4'd0: tmpM_val[i] = 18'd0;  
+        4'd1: tmpM_val[i] = (!s[i]) ? tmp1M : tmp1MN;
+        4'd2: tmpM_val[i] = (!s[i]) ? tmp2M : tmp2MN;
+        4'd4: tmpM_val[i] = (!s[i]) ? tmp3M : tmp3MN;
+        4'd8: tmpM_val[i] = (!s[i]) ? tmp4M : tmp4MN;
         default: prt_prod = 18'd0; 
     endcase
+
+    //Final partial product generation (of size [2*Bits-1:0] = 32 bits)
+    //Instead of shifting 6 partial products of 32 bits are created, to then be added accordingly. 
+    //should a carry vector be created instead of adding the sign bit in every partial prod? s_Carry[i] = 1 << xbits
+    case (i)    
+        2'd0: prt_prod[i] = { 10'd0,~s[i],s[i],s[i],s[i],tmpM_val[i]} +  {31'd0,s[i]}; //LSB
+        2'd1: prt_prod[i] = ({10'd0,3'b011,~s[i],tmpM_val[i]} << i*3) + ({31'd0,s[i]}<< i*3);
+        2'd2: prt_prod[i] = ({10'd0,3'b011,~s[i],tmpM_val[i]} << i*3) + ({31'd0,s[i]}<< i*3);  
+        2'd3: prt_prod[i] = ({10'd0,3'b011,~s[i],tmpM_val[i]} << i*3) + ({31'd0,s[i]}<< i*3);
+        2'd4: prt_prod[i] = ({10'd0,3'b001,~s[i],tmpM_val[i]} << i*3) + ({31'd0,s[i]}<< i*3);
+        2'd5: prt_prod[i] = ({10'd0,3'b000, 1'b0,tmpM_val[i]} << i*3);
+        default: prt_prod[i] = 32'd0; 
+    endcase
+
+    end
 end
-
-
-
+endgenerate
 
 
 endmodule
