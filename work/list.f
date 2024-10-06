@@ -17,5 +17,9 @@
 ../rtl/fp16/propio/fp16_comp.sv
 ../rtl/fp16/propio/fp16_mult.sv
 
+#misc
+../rtl/misc/mult_16bits.v
+
 #dv
 ../dv/tb_fp16.sv
+../rtl/misc/mult_16bits_tb.sv

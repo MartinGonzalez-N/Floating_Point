@@ -3,9 +3,9 @@ call C:\Xilinx\Vivado\2023.1\settings64.bat
 
 if "%1"=="sim" (goto ana)
 if "%1"=="waves" (goto waves)
+if "%1"=="compile" (goto compile)
 
-
- :ana
+:ana
 	echo Making ana...
 	
 	call xvlog -sv -f list.f -L UVM 
@@ -27,3 +27,19 @@ if "%1"=="waves" (goto waves)
 	echo Loading waves...
 	call vivado -mode batch -source wave_load.tcl
 	if "%1"=="waves" (exit /B 0)
+
+:: To compile a verilog file:
+::    >> makefile.bat compile path\my_verilog_file.sv
+::    >> .\Makefile.bat compile ../rtl/misc/mult_16bits.v 
+:: To run sim:
+::    >> makefile.bat sim top_module_name seed_value
+:compile
+    echo Compiling specified Verilog file...
+    if "%2"=="" (
+        echo Error: No Verilog file specified.
+        exit /B 1
+    )
+    call xvlog -sv "%2" -L UVM 
+    echo Compilation complete.
+    exit /B 0
+	
