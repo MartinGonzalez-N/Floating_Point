@@ -37,7 +37,7 @@ module mult_16bits_tb();
 	$display("===========================");
 	$display("---- Random data test -----");
 	$display("===========================");
-	repeat(100) begin  //for (int i = 0; i < 1000; i++)
+	repeat(1000000) begin  //for (int i = 0; i < 1000; i++)
 		@(posedge clock);
 		void'(std::randomize(A,B));
 		OUT_exp = A*B;
@@ -59,7 +59,7 @@ module mult_16bits_tb();
 		error_status++;
 		end
 		else
-			$display("[Pass] Multiplication %d x %d | Result: %d Expected: %d ", A, B, actual, expected);  
+			//$display("[Pass] Multiplication %d x %d | Result: %d Expected: %d ", A, B, actual, expected);  
 		return (error_status);
 	endfunction : checkit
 
