@@ -47,13 +47,14 @@ int_fp_mul mul_i(
 	.c(mul),
 	.error(mul_error)
 );
-*/
+
 fp_add #(.BITS(WORD_LENGHT)) add_i (
 	.iA(a),
 	.iB(b),
 	.oZ(add)
 );
-
+*/
+fp_add_naive fp_add_naive_i(.a(a),.b(b),.y(add));
 fp_mult #(.BITS(WORD_LENGHT)) mult_i(
 	.iA(a),
 	.iB(b),

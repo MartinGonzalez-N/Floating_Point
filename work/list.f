@@ -12,7 +12,19 @@
 ../rtl/fp16/open/mul/mul4x4.v
 ../rtl/fp16/open/mul/mul8x8.v
 ../rtl/fp16/open/mul/mul16x16.v
-
+//bb fp
+../rtl/bb_fp/adder.sv
+../rtl/bb_fp/comp2.sv
+../rtl/bb_fp/exp_diff.sv
+../rtl/bb_fp/lzd.sv
+../rtl/bb_fp/mag_comp.sv
+../rtl/bb_fp/man_align.sv
+../rtl/bb_fp/man_swap.sv
+../rtl/bb_fp/norm.sv
+../rtl/bb_fp/sign_ctrl.sv
+../rtl/bb_fp/round.sv
+../rtl/bb_fp/fp_add_naive.sv
+//propio
 ../rtl/fp16/propio/fp16_add.sv
 ../rtl/fp16/propio/fp16_comp.sv
 ../rtl/fp16/propio/fp16_mult.sv
@@ -28,3 +40,6 @@
 ../rtl/misc/mult_16bits_tb.sv
 ../rtl/misc/mult_nbits_tb.sv
 ../rtl/misc/adder_tree_tb.sv
+
+
+../rtl/test.sv
