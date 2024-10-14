@@ -19,7 +19,12 @@
 
 #misc
 ../rtl/misc/mult_16bits.v
+../rtl/misc/mult_11bits.v
+../rtl/misc/mult_nbits.v
+../rtl/misc/adder_tree.v
 
 #dv
 ../dv/tb_fp16.sv
 ../rtl/misc/mult_16bits_tb.sv
+../rtl/misc/mult_nbits_tb.sv
+../rtl/misc/adder_tree_tb.sv

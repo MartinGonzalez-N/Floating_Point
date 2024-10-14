@@ -1,4 +1,4 @@
-module mult_16bits_tb(); 
+module mult_nbits_tb(); 
 
 	localparam N = 16;
 
@@ -28,7 +28,7 @@ module mult_16bits_tb();
 	end
 
 	//DUT instantiation//
-	mult_16bits #(N) DUT (A, B, OUT);
+	mult_nbits #(N) DUT (A, B, OUT);
 
 
 	//------------------------------- MODULE TEST CASES (VERIFICATION LOGIC) ---------------------------------- // 
